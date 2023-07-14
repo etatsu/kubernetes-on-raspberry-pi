@@ -30,12 +30,11 @@ jobs:
           with:
             images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-        - name: build
+        - name: Build
           working-directory: ./apps/4_raspiMonitor
           run: |
             docker build -t raspi-monitor -f Dockerfile.monitor .
             docker tag raspi-monitor:latest ${{ github.repository_owner }}/raspi-monitor:latest
-            docker push ghcr.io/${{ github.repository_owner }}/raspi-monitor:latest
   
         - name: Deploy
           working-directory: ./apps/4_raspiMonitor
