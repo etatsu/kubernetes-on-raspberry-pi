@@ -1,6 +1,7 @@
 name: Deploy RaspiMonitor
 
 on:
+    workflow_dispatch:
     push:
         branches:
             - master
