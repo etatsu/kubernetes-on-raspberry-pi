@@ -18,7 +18,7 @@ jobs:
           uses: actions/checkout@v2
 
         - name: Log in to the Container registry
-          uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+          uses: docker/login-action@v2
           with:
             registry: ${{ env.REGISTRY }}
             username: ${{ github.actor }}
@@ -26,17 +26,14 @@ jobs:
 
         - name: Extract metadata (tags, labels) for Docker
           id: meta
-          uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+          uses: docker/metadata-action@v4
           with:
             images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-        - name: Build
-          working-directory: ./apps/4_raspiMonitor
-          run: |
-            docker build -t raspi-monitor -f Dockerfile.monitor .
-            docker tag raspi-monitor:latest ${{ github.repository_owner }}/raspi-monitor:latest
-  
-        - name: Deploy
-          working-directory: ./apps/4_raspiMonitor
-          run: |
-            docker push ${{ github.repository_owner }}/raspi-monitor:latest
+        - name: Build and push Docker image
+          uses: docker/build-push-action@v4
+          with:
+            context: ./apps/4_raspiMonitor/
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
