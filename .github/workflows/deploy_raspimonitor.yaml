@@ -10,7 +10,7 @@ on:
   
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: raspimonitor
+  IMAGE_NAME: ${{ github.repository_owner }}/raspimonitor
 
 jobs:
   build:
