@@ -1,40 +1,42 @@
 name: Deploy RaspiMonitor
 
 on:
-    workflow_dispatch:
-    push:
-        branches:
-            - main
-
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "./apps/4_raspiMonitor/**"
+  
 env:
-    REGISTRY: ghcr.io
-    IMAGE_NAME: raspi-monitor
-              
+  REGISTRY: ghcr.io
+  IMAGE_NAME: raspi-monitor
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
 
-        - name: Log in to the Container registry
-          uses: docker/login-action@v2
-          with:
-            registry: ${{ env.REGISTRY }}
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Log in to the Container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Extract metadata (tags, labels) for Docker
-          id: meta
-          uses: docker/metadata-action@v4
-          with:
-            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-        - name: Build and push Docker image
-          uses: docker/build-push-action@v4
-          with:
-            context: ./apps/4_raspiMonitor
-            file: Dockerfile.monitor
-            push: true
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./apps/4_raspiMonitor
+        file: ./apps/4_raspiMonitor/Dockerfile.monitor
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
