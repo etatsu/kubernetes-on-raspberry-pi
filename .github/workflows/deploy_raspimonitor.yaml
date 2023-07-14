@@ -39,4 +39,4 @@ jobs:
         - name: Deploy
           working-directory: ./apps/4_raspiMonitor
           run: |
-            docker push ghcr.io/${{ github.repository_owner }}/raspi-monitor:latest
+            docker push ${{ github.repository_owner }}/raspi-monitor:latest
