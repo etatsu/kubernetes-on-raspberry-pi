@@ -10,7 +10,7 @@ spec:
     device: knode2
   containers:
     - name: raspi-monitor
-      image: tingelbuxe/k3s-meetup:raspi-monitor
+      image: ghcr.io/etatsu/raspimonitor:main
       imagePullPolicy: Always
       securityContext:
         privileged: true
